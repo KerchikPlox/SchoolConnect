@@ -1,0 +1,17 @@
+app:
+  backend:
+    host: 0.0.0.0
+    port: 8083
+
+gino:
+  user: writer
+  password: feather
+  database: publishing_platform
+  port: 5432
+  host: localhost # "postgres" database service address inside of docker or "localhost" from host
+
+cors:
+  origins:
+    - http://localhost:8083  # server itself
+    - http://localhost:3000  # npm start
+    - http://localhost:3001  # npm start

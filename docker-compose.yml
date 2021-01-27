@@ -1,0 +1,46 @@
+version: '3.2'
+
+services:
+  postgres:
+    tty: true
+    image: postgres:12
+    container_name: postgres_articles
+    volumes:
+      - pg_data_articles:/var/lib/postgresql/data
+    networks:
+      - database
+    environment:
+      - POSTGRES_USER=writer
+      - POSTGRES_PASSWORD=feather
+      - POSTGRES_DB=publishing_platform
+    ports:
+      - 5432:5432
+    hostname: localhost
+
+  main_app:
+    tty: true
+    build:
+      context: .
+      args:
+        requirements: requirements/dev.txt
+    volumes:
+      - .:/app:delegated
+    networks:
+      - database
+    container_name: articles_site
+    environment:
+      - DEBUG=True
+      - PYTHONUNBUFFERED=1
+      - SETTINGS_FILE=api.dev.yml
+    ports:
+      - 8083:8083
+    expose:
+      - 8083
+    command: uvicorn main:app --port 8083 --host "0.0.0.0" --workers 1 --log-level "debug"
+
+
+volumes:
+  pg_data_articles:
+
+networks:
+  database:
