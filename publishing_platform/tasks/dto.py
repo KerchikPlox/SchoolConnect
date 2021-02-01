@@ -14,7 +14,7 @@ __all__ = [
     "TaskFAPI",
     "CreateTaskFAPI",
     "TaskAndUserRealationFAPI",
-    "CreateTaskAndUserRealationFAPI"
+    "CreateTaskAndUserRealationFAPI",
 ]
 
 
@@ -46,6 +46,20 @@ class CreateTaskFAPI:
         self.title = title
         self.description = description
         self.file = file
+
+
+#class UpdateTaskFAPI:
+#    def __init__(
+#            self,
+#            form_id: Optional[UUID] = Form(...),
+#            title: Optional[str] = Form(""),
+#            description: Optional[str] = Form(""),
+#            file: Optional[UploadFile] = File(...)
+#    ):
+#        self.form_id = form_id
+#        self.title = title
+#        self.description = description
+#        self.file = file
 
 
 class TaskAndUserRealationFAPI(BaseModel):

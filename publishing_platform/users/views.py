@@ -1,7 +1,7 @@
 from typing import List
 from uuid import UUID
 
-from fastapi import APIRouter, Depends
+from fastapi import APIRouter, Depends, Form, Path
 
 import publishing_platform.users.service as users_service
 from publishing_platform.auth.service import validate_token_dependency
@@ -26,9 +26,9 @@ async def create_user(add_user_info: AddUserFAPI) -> UserAndTokenFAPI:
     return await users_service.create_user(add_user_info)
 
 
-@users_router.put("/rating")
-async def update_user_rating(rating: UpdateRatingFAPI, _=Depends(validate_token_dependency)):
-    await users_service.update_user_rating(rating)
+@users_router.put("/{user_id}", response_model=UserFAPI)
+async def update_user(update_info: UpdateUserFAPI, user_id: UUID = Path(...)):
+    return await users_service.update_user(update_info, user_id)
 
 
 @users_router.delete("/{user_id}")

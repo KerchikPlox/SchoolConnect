@@ -1,6 +1,8 @@
 from typing import List
 from uuid import uuid4, UUID
 
+from fastapi import Path
+
 from publishing_platform.forms.dto import *
 from publishing_platform.forms.models import *
 from publishing_platform.users.enums import *
@@ -26,6 +28,10 @@ async def delete_form(form_id: UUID) -> None:
     form = await FormORM.query.where(FormORM.id == form_id).gino.first_or_404()
 
     await form.delete()
+
+
+async def update_form(update_form_info: UpdateFormFAPI, form_id: UUID = Path(...)):
+    await FormORM.update.values(**update_form_info.dict(exclude_unset=True)).where(FormORM.id == form_id).gino.status()
 
 
 async def get_all_realtions() -> List[UserAndFormRelationsFAPI]:

@@ -1,4 +1,4 @@
-from typing import List
+from typing import List, Optional
 from uuid import UUID
 
 from pydantic import BaseModel
@@ -9,7 +9,8 @@ __all__ = [
     "FormFAPI",
     "AddFormFAPI",
     "AddRelationFormToStudentFAPI",
-    "UserAndFormRelationsFAPI"
+    "UserAndFormRelationsFAPI",
+    "UpdateFormFAPI",
 ]
 
 
@@ -22,6 +23,11 @@ class FormFAPI(BaseModel):
 class AddFormFAPI(BaseModel):
 
     name: str
+
+
+class UpdateFormFAPI(BaseModel):
+
+    name: Optional[str]
 
 
 class UserAndFormRelationsFAPI(BaseModel):

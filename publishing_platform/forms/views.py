@@ -1,7 +1,7 @@
 from typing import List
 from uuid import UUID
 
-from fastapi import APIRouter
+from fastapi import APIRouter, Path
 
 import publishing_platform.forms.service as forms_service
 from publishing_platform.forms.dto import *
@@ -23,6 +23,11 @@ async def get_forms_all():
 @forms_router.post("/create_form")
 async def create_form(add_form_info: AddFormFAPI):
     return await forms_service.create_form(add_form_info)
+
+
+@forms_router.put("/{form_id}")
+async def create_form(update_form_info: UpdateFormFAPI, form_id: UUID = Path(...)):
+    return await forms_service.update_form(update_form_info, form_id)
 
 
 @forms_router.delete("/delete_{form_id}")

@@ -2,7 +2,7 @@ import datetime
 from typing import List
 from uuid import uuid4, UUID
 
-from fastapi import HTTPException, status
+from fastapi import HTTPException, status, Path
 
 from publishing_platform.auth.dto import Token
 from publishing_platform.auth.service import get_password_hash, create_access_token
@@ -14,7 +14,7 @@ from publishing_platform.users.models import *
 __all__ = [
     "create_user",
     "get_user_by_id",
-    "update_user_rating",
+    "update_user",
     "delete_user",
     "get_users_all",
 ]
@@ -53,8 +53,8 @@ async def get_user_by_id(user_id: UUID) -> UserFAPI:
     return UserFAPI(**user.to_dict())
 
 
-async def update_user_rating(rating: UpdateRatingFAPI):
-    await update_rating(rating, User)
+async def update_user(update_info: UpdateUserFAPI, user_id: UUID = Path(...)):
+    await User.update.values(**update_info.dict(exclude_unset=True)).where(User.id == user_id).gino.status()
 
 
 async def delete_user(user_id: UUID) -> None:

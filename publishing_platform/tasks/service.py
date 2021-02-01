@@ -2,7 +2,7 @@ import datetime
 from typing import List
 from uuid import uuid4
 
-from fastapi import File, UploadFile, Depends
+from fastapi import File, UploadFile, Depends, Path
 
 from sqlalchemy.dialects.postgresql import UUID
 
@@ -18,7 +18,7 @@ from publishing_platform.tasks.models import *
 __all__ = [
     "create_task",
     "get_all_tasks",
-    "create_relations"
+    "create_relations",
 ]
 
 
@@ -54,9 +54,13 @@ async def create_relations(users: List[User], task: TaskORM):
     for i in users:
         user = await User.query.where(User.id == i.id).gino.first_or_404()
         user_role = user.role
-        await TaskAndUserRelationORM.create( # TaskAndUserRelationORM ???
+        await TaskAndUserRelationORM.create(
             user_id=user.id, task_id=task.id, role=user_role
         )
+
+
+#async def update_task(update_info: UpdateTaskFAPI, task_id: UUID = Path(...)):
+#    await TaskORM.update.values(**update_info.dict(exclude_unset=True)).where(TaskORM.id == task_id).gino.status()
 
 
 async def get_all_tasks() -> List[TaskFAPI]:

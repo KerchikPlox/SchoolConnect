@@ -1,6 +1,8 @@
 from typing import List
 
-from fastapi import APIRouter, File, UploadFile, Depends
+from fastapi import APIRouter, File, UploadFile, Depends, Path
+
+from uuid import UUID
 
 import publishing_platform.tasks.service as tasks_service
 from publishing_platform.tasks.dto import *
@@ -21,3 +23,8 @@ async def create_task(add_task_info: CreateTaskFAPI = Depends()):
 @tasks_router.get("")  # noqa
 async def get_all_tasks() -> List[TaskFAPI]:
     return await tasks_service.get_all_tasks()
+
+
+#@tasks_router.put("/{task_id}", response_model=TaskFAPI)
+#async def update_task(task_id: UUID = Path(...), update_info: UpdateTaskFAPI = Depends()):
+#    return await tasks_service.update_task(update_info, task_id)
