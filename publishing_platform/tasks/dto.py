@@ -13,8 +13,9 @@ from publishing_platform.users.enums import *
 __all__ = [
     "TaskFAPI",
     "CreateTaskFAPI",
-    "TaskAndUserRealationFAPI",
+    "TaskAndUserRelationFAPI",
     "CreateTaskAndUserRealationFAPI",
+    "UpdateTaskFAPI"
 ]
 
 
@@ -24,7 +25,7 @@ class TaskFAPI(BaseModel):
     form_id: UUID
     title: str
     description: str
-    file: bytes
+    file_url: Optional[str]
     created_at: datetime.datetime
 
     @validator("created_at", pre=True, always=True)
@@ -39,30 +40,37 @@ class CreateTaskFAPI:
         form_id: UUID = Form(...),
         title: str = Form(""),
         description: Optional[str] = Form(""),
-        file: UploadFile = File(...)
     ):
         self.creator_id = creator_id
         self.form_id = form_id
         self.title = title
         self.description = description
+
+from enum import Enum
+
+
+class NonePlaceholder(str, Enum):
+    none = 'None'
+
+
+class UpdateTaskFAPI:
+    def __init__(
+            self,
+            form_id: Optional[UUID] = Form(NonePlaceholder.none),
+            title: Optional[str] = Form(NonePlaceholder.none),
+            description: Optional[str] = Form(NonePlaceholder.none),
+            file: Optional[UploadFile] = Form(NonePlaceholder.none)
+    ):
+        self.form_id = form_id
+        self.title = title
+        self.description = description
         self.file = file
 
-
-#class UpdateTaskFAPI:
-#    def __init__(
-#            self,
-#            form_id: Optional[UUID] = Form(...),
-#            title: Optional[str] = Form(""),
-#            description: Optional[str] = Form(""),
-#            file: Optional[UploadFile] = File(...)
-#    ):
-#        self.form_id = form_id
-#        self.title = title
-#        self.description = description
-#        self.file = file
+    def exclude_unset(self) -> dict:
+        return {k: v for k, v in self.__dict__.items() if not isinstance(v, NonePlaceholder)}
 
 
-class TaskAndUserRealationFAPI(BaseModel):
+class TaskAndUserRelationFAPI(BaseModel):
     user_id: UUID
     task_id: UUID
     role: Roles

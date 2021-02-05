@@ -2,6 +2,7 @@ import datetime
 from typing import List
 from uuid import uuid4
 
+
 from fastapi import File, UploadFile, Depends, Path
 
 from sqlalchemy.dialects.postgresql import UUID
@@ -29,14 +30,10 @@ async def create_task(add_task_info: CreateTaskFAPI = Depends()):
             await UserAndFormRelationsORM
                 .query
                 .where(UserAndFormRelationsORM.form_id == add_task_info.form_id)
-                .where(UserAndFormRelationsORM.role == Roles.student)
                 .gino.all()
         )
     ]
     users: List[User] = await User.query.where(User.id.in_(students_ids)).gino.all()
-
-    content: bytes = await add_task_info.file.read()
-    await add_task_info.file.close()
 
     task = await TaskORM.create(
         id=uuid4(),
@@ -44,7 +41,6 @@ async def create_task(add_task_info: CreateTaskFAPI = Depends()):
         form_id=add_task_info.form_id,
         title=add_task_info.title,
         description=add_task_info.description,
-        file=content,
         created_at=datetime.datetime.utcnow(),
     )
     await create_relations(users, task)
@@ -59,10 +55,34 @@ async def create_relations(users: List[User], task: TaskORM):
         )
 
 
-#async def update_task(update_info: UpdateTaskFAPI, task_id: UUID = Path(...)):
-#    await TaskORM.update.values(**update_info.dict(exclude_unset=True)).where(TaskORM.id == task_id).gino.status()
+async def get_all_relations() -> List[TaskAndUserRelationFAPI]:
+    return [TaskAndUserRelationFAPI(**u.to_dict()) for u in await TaskAndUserRelationORM.query.gino.all()]
+
+
+async def update_task(update_info: UpdateTaskFAPI, task_id: UUID = Path(...)):
+    await TaskORM.update.values(**update_info.exclude_unset()).where(TaskORM.id == task_id).gino.status()
 
 
 async def get_all_tasks() -> List[TaskFAPI]:
-    print([TaskFAPI(**u.to_dict()) for u in await TaskORM.query.gino.all()])
     return [TaskFAPI(**u.to_dict()) for u in await TaskORM.query.gino.all()]
+
+
+async def delete_task(task_id: UUID):
+    task = await TaskORM.query.where(TaskORM.id == task_id).gino.first_or_404()
+    relations_ids = [
+        r.task_id
+        for r in (
+            await TaskAndUserRelationORM
+                .query
+                .where(TaskAndUserRelationORM.task_id == task_id)
+                .gino.all()
+        )
+    ]
+    relations: List[TaskAndUserRelationORM] = await (
+        TaskAndUserRelationORM.query.where(TaskAndUserRelationORM.task_id.in_(relations_ids)).gino.all()
+    )
+
+    for i in relations:
+        await i.delete()
+
+    await task.delete()

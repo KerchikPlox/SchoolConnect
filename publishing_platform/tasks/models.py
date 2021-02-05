@@ -18,7 +18,7 @@ class TaskORM(db.Model):
     form_id = db.Column(UUID(), nullable=False)
     title = db.Column(db.String(), nullable=False)
     description = db.Column(db.String(), nullable=True)
-    file = db.Column(BYTEA(), nullable=True)
+    file_url = db.Column(db.String(), nullable=True)
     created_at = db.Column(db.DateTime(), nullable=False, default=datetime.datetime.utcnow)
 
     __creator_id_fk = db.ForeignKeyConstraint(["creator_id"], ["users.id"])

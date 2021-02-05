@@ -26,6 +26,21 @@ async def get_forms_all() -> List[FormFAPI]:
 
 async def delete_form(form_id: UUID) -> None:
     form = await FormORM.query.where(FormORM.id == form_id).gino.first_or_404()
+    relations_ids = [
+        r.form_id
+        for r in (
+            await UserAndFormRelationsORM
+                .query
+                .where(UserAndFormRelationsORM.form_id == form_id)
+                .gino.all()
+        )
+    ]
+    relations: List[UserAndFormRelationsORM] = await (
+        UserAndFormRelationsORM.query.where(UserAndFormRelationsORM.form_id.in_(relations_ids)).gino.all()
+    )
+
+    for i in relations:
+        await i.delete()
 
     await form.delete()
 

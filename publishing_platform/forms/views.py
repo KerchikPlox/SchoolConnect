@@ -31,7 +31,7 @@ async def create_form(update_form_info: UpdateFormFAPI, form_id: UUID = Path(...
 
 
 @forms_router.delete("/delete_{form_id}")
-async def delete_user(form_id: UUID):
+async def delete_form(form_id: UUID):
     await forms_service.delete_form(form_id)
 
 
