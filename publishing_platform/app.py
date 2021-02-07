@@ -1,7 +1,8 @@
 from fastapi import FastAPI
 from gino_starlette import Gino
+from fastapi.templating import Jinja2Templates
 
-from publishing_platform.constants import CONFIG
+from publishing_platform.constants import CONFIG, PROJECT_DIR
 
 __all__ = [
     "app",
@@ -10,6 +11,8 @@ __all__ = [
 
 
 app: FastAPI = FastAPI(title="Publishing platform", debug=True)
+
+index_templates = Jinja2Templates(directory=PROJECT_DIR / "templates/")
 
 # app.mount("/static", StaticFiles(directory=PROJECT_DIR / "static"), name="static")
 
