@@ -7,6 +7,7 @@ from publishing_platform.constants import CONFIG, PROJECT_DIR
 __all__ = [
     "app",
     "db",
+    "index_templates"
 ]
 
 
