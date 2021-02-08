@@ -1,12 +1,14 @@
 from typing import List
 from uuid import UUID
 
-from fastapi import APIRouter, Depends, Form, Path
+from fastapi import APIRouter, Depends, Form, Path, Request
 
 import publishing_platform.users.service as users_service
 from publishing_platform.auth.service import validate_token_dependency
 from publishing_platform.repo.common.common_dto import UpdateRatingFAPI
 from publishing_platform.users.dto import *
+from fastapi.responses import HTMLResponse
+from publishing_platform.app import templates
 
 users_router = APIRouter()
 
@@ -21,7 +23,7 @@ async def get_users_all():
     return await users_service.get_users_all()
 
 
-@users_router.post("", response_model=UserAndTokenFAPI)
+@users_router.post("/create_users", response_model=UserAndTokenFAPI)
 async def create_user(add_user_info: AddUserFAPI) -> UserAndTokenFAPI:
     return await users_service.create_user(add_user_info)
 
