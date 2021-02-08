@@ -7,13 +7,13 @@ from publishing_platform.constants import CONFIG, PROJECT_DIR
 __all__ = [
     "app",
     "db",
-    "index_templates"
+    "templates"
 ]
 
 
 app: FastAPI = FastAPI(title="Publishing platform", debug=True)
 
-index_templates = Jinja2Templates(directory=PROJECT_DIR / "templates/")
+templates = Jinja2Templates(directory=PROJECT_DIR / "templates/")
 
 # app.mount("/static", StaticFiles(directory=PROJECT_DIR / "static"), name="static")
 

@@ -8,6 +8,7 @@ from publishing_platform.files.views import files_router
 from publishing_platform.forms.views import forms_router
 from publishing_platform.tasks.views import tasks_router
 from publishing_platform.users.views import users_router
+from front.lk import default_routes
 
 __all__ = ["init_routes"]
 
@@ -24,21 +25,13 @@ def init_routes(app: FastAPI):
     )
 
     include_route(
-        articles_router, default_response_class=JSONResponse, tags=["Articles"], prefix="/api/articles",
-    )
-
-    include_route(
-        comments_router, default_response_class=JSONResponse, tags=["Comments"], prefix="/api/comments",
-    )
-
-    include_route(
         forms_router, default_response_class=JSONResponse, tags=["Forms"], prefix="/api/forms",
     )
 
     include_route(
-        files_router, default_response_class=JSONResponse, tags=["Files"], prefix="/api/files",
+        tasks_router, default_response_class=JSONResponse, tags=["Tasks"], prefix="/api/tasks",
     )
 
     include_route(
-        tasks_router, default_response_class=JSONResponse, tags=["Tasks"], prefix="/api/tasks",
+        default_routes, default_response_class=JSONResponse, tags=["Front"], prefix="/api/test",
     )

@@ -8,6 +8,9 @@ from publishing_platform.auth.dto import Token
 from publishing_platform.auth.service import get_password_hash, create_access_token
 from publishing_platform.repo.common.common_dto import UpdateRatingFAPI
 from publishing_platform.repo.common.common_service import update_rating
+from publishing_platform.tasks.models import TaskAndUserRelationORM
+from publishing_platform.forms.models import UserAndFormRelationsORM
+from publishing_platform.forms.dto import UserAndFormRelationsFAPI
 from publishing_platform.users.dto import *
 from publishing_platform.users.models import *
 
@@ -60,6 +63,36 @@ async def update_user(update_info: UpdateUserFAPI, user_id: UUID = Path(...)):
 async def delete_user(user_id: UUID) -> None:
     user = await User.query.where(User.id == user_id).gino.first_or_404()
     user_identity = await UserIdentity.query.where(UserIdentity.login == user.login).gino.first_or_404()
+    form_relations_ids = [
+        r.user_id
+        for r in (
+            await UserAndFormRelationsORM
+                .query
+                .where(UserAndFormRelationsORM.user_id == user_id)
+                .gino.all()
+        )
+    ]
+    task_relations_ids = [
+        r.user_id
+        for r in (
+            await TaskAndUserRelationORM
+                .query
+                .where(TaskAndUserRelationORM.user_id == user_id)
+                .gino.all()
+        )
+    ]
+    task_relations: List[TaskAndUserRelationORM] = await (
+        TaskAndUserRelationORM.query.where(TaskAndUserRelationORM.user_id.in_(task_relations_ids)).gino.all()
+    )
+    form_relations: List[UserAndFormRelationsORM] = await (
+        UserAndFormRelationsORM.query.where(UserAndFormRelationsORM.user_id.in_(form_relations_ids)).gino.all()
+    )
+    if form_relations:
+        for i in form_relations:
+            await i.delete()
+    if task_relations:
+        for i in task_relations:
+            await i.delete()
 
     await user.delete()
     await user_identity.delete()
