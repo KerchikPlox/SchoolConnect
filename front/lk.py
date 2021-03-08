@@ -10,10 +10,9 @@ default_routes = APIRouter()
 
 @default_routes.get("/", response_class=HTMLResponse)
 async def main(request: Request):
-    return templates.TemplateResponse("base.html", {'request': request})
+    return templates.TemplateResponse("base.html", {'request': request, 'BACKEND_DOMAIN': BACKEND_DOMAIN, })
 
 
 @default_routes.get("/login", response_class=HTMLResponse)
 async def login(request: Request):
-    return templates.TemplateResponse("login_form.html", {'request': request, 'BACKEND_DOMAIN': BACKEND_DOMAIN})
-
+    return templates.TemplateResponse("login_form.html", {'request': request, 'BACKEND_DOMAIN': BACKEND_DOMAIN, })

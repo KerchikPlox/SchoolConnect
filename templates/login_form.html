@@ -4,6 +4,9 @@
     <meta charset="UTF-8">
     <title>SchoolConnect</title>
     <link href="https:////maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+    <script
+            src="https://cdn.jsdelivr.net/npm/js-cookie@rc/dist/js.cookie.min.js"
+    ></script>
 </head>
 
 <body>
@@ -45,7 +48,8 @@
 <script>
 
     // --------------------------------------------------- Эта секция исполняется при загрузке страницы --------------------------------------------------------
-
+    // проверяем автризацию: если мы уже авторизованы, сразу попадаем в лк вместо страницы логина
+    document.onload = check_auth()
 
     // ---------------------------------------------------------------------------------------------------------------------------------------------------------
 
@@ -75,33 +79,70 @@
                     'Content-Type': 'application/x-www-form-urlencoded',
                 },
                 redirect: 'manual', // *manual, follow, error
-                referrerPolicy: 'no-referrer', // no-referrer, *client
+                referrerPolicy: 'no-referrer', // *no-referrer, client
                 body: form.toString(), // body data type must match "Content-Type" header
                 json: true
             }
         )
             .then((response) => {
                 if (response.status !== 200) {
-                    // делайте что-то, сообщение какое-то выводите, хз
+                    // делайте что-то, сообщение какое-то о неправильных данных выводите, хз
                 } else {
                     return response.json();
                 }
 
             })
             .then((data) => {
-                setCookie('access_token', data['access_token'], 7);
+                Cookies.set('access_token', data['access_token'], {expires: 7});
 
-                // забрать юзера и положить в куки
+                // забираем юзера и кладём в куки
+                fetch(
+                    '{{BACKEND_DOMAIN}}api/auth/',
+                    {
+                        method: 'GET',
+                        mode: 'cors', // no-cors, *cors, same-origin
+                        cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
+                        credentials: 'include', // *include, same-origin, omit
+                        referrerPolicy: 'no-referrer', // *no-referrer, client
+                        headers: {'Authorization': `Bearer ${data['access_token']}`}
+                    }
+                ).then((response) => {
+                        if (response.status !== 200) {
+                            console.log(response.json())
+                            // делайте что-то, сообщение какое-то о неправильных данных выводите, хз
+                        } else {
+                            return response.json();
+                        }
+                    }
+                ).then((data) => {
+                        console.log(data)
+                        Cookies.set('current_user', JSON.stringify(data));
+                        // как потом получать какие-то свойства юзера:
+                        // console.log(JSON.parse(Cookies.get('current_user')).author_name);
 
-                // редирект на другую страницу
+                        // редирект на другую страницу
+                        window.location.replace('{{BACKEND_DOMAIN}}api/test')
+                    }
+                )
+
             });
     }
 
-    function setCookie(key, value, expiresAfterDays) {
-        const currentDate = new Date();
-        currentDate.setTime(currentDate.getTime() + (expiresAfterDays * 24 * 60 * 60 * 1000));
-        const expires = "expires=" + currentDate.toGMTString();
-        document.cookie = `${key}=${value};${expires};path=/`;
+    // использовать потом на всех страницах
+    function check_auth() {
+
+        console.log(window.location.pathname)
+
+        if (document.cookie.match('(^|;) ?' + 'access_token' + '=([^;]*)(;|$)') == null) {
+            document.cookie = "";
+            if (window.location.pathname !== '/api/test/login') {
+                window.location.replace('{{BACKEND_DOMAIN}}api/test/login');
+            }
+        } else {
+            if (window.location.pathname === '/api/test/login') {
+                window.location.replace('{{BACKEND_DOMAIN}}api/test')
+            }
+        }
     }
 
 </script>
