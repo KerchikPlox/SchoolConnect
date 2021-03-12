@@ -4,6 +4,8 @@ from uuid import UUID
 from fastapi import APIRouter, Depends, Form, Path, Request
 
 import publishing_platform.users.service as users_service
+from publishing_platform.tasks.dto import TaskAndUserRelationFAPI
+from publishing_platform.forms.dto import UserAndFormRelationsFAPI
 from publishing_platform.auth.service import validate_token_dependency
 from publishing_platform.repo.common.common_dto import UpdateRatingFAPI
 from publishing_platform.users.dto import *
@@ -41,3 +43,15 @@ async def delete_user(user_id: UUID):
 @users_router.get("/{user_id}", response_model=UserFAPI)
 async def get_user_by_id(user_id: UUID):
     return await users_service.get_user_by_id(user_id)
+
+
+@users_router.get("/in_task/{user_id}", response_model=List[TaskAndUserRelationFAPI])
+async def get_all_relations_where_user_in_task(user_id: UUID) -> List[TaskAndUserRelationFAPI]:
+    return await users_service.get_all_relations_where_user_in_task(user_id)
+
+
+@users_router.get("/in_form/{user_id}", response_model=List[UserAndFormRelationsFAPI])
+async def get_all_relations_where_user_in_form(user_id: UUID) -> List[UserAndFormRelationsFAPI]:
+    return await users_service.get_all_relations_where_user_in_form(user_id)
+
+

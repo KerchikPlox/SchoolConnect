@@ -46,5 +46,5 @@ async def get_relations_by_role(role: Roles):
 
 
 @forms_router.post("/relation_form_to_student_{form_id}") # noqa
-async def create_relation_form_to_student(add_relation_info: AddRelationFormToStudentFAPI):
+async def create_relation_form_to_user(add_relation_info: AddRelationFormToStudentFAPI):
     return await forms_service.create_relation_form_to_student(add_relation_info)

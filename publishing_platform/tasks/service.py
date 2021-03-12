@@ -8,6 +8,7 @@ from fastapi import File, UploadFile, Depends, Path
 from sqlalchemy.dialects.postgresql import UUID
 
 from publishing_platform.forms.models import UserAndFormRelationsORM
+from publishing_platform.attachments.models import AttachmentORM
 from publishing_platform.tasks.dto import *
 from publishing_platform.tasks.models import *
 from publishing_platform.users.enums import *
@@ -69,7 +70,7 @@ async def get_all_tasks() -> List[TaskFAPI]:
 
 async def delete_task(task_id: UUID):
     task = await TaskORM.query.where(TaskORM.id == task_id).gino.first_or_404()
-    relations_ids = [
+    user_relations_ids = [
         r.task_id
         for r in (
             await TaskAndUserRelationORM
@@ -78,11 +79,26 @@ async def delete_task(task_id: UUID):
                 .gino.all()
         )
     ]
-    relations: List[TaskAndUserRelationORM] = await (
-        TaskAndUserRelationORM.query.where(TaskAndUserRelationORM.task_id.in_(relations_ids)).gino.all()
+    task_relations_ids = [
+        r.task_id
+        for r in (
+            await AttachmentORM
+                .query
+                .where(AttachmentORM.task_id == task_id)
+                .gino.all()
+        )
+    ]
+    task_relations: List[AttachmentORM] = await (
+        AttachmentORM.query.where(AttachmentORM.task_id.in_(task_relations_ids)).gino.all()
+    )
+    user_relations: List[TaskAndUserRelationORM] = await (
+        TaskAndUserRelationORM.query.where(TaskAndUserRelationORM.task_id.in_(user_relations_ids)).gino.all()
     )
 
-    for i in relations:
+    for i in user_relations:
+        await i.delete()
+
+    for i in task_relations:
         await i.delete()
 
     await task.delete()

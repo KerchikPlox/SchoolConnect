@@ -6,6 +6,10 @@ from fastapi import HTTPException, status, Path
 
 from publishing_platform.auth.dto import Token
 from publishing_platform.auth.service import get_password_hash, create_access_token
+from publishing_platform.tasks.dto import TaskAndUserRelationFAPI
+from publishing_platform.tasks.models import TaskAndUserRelationORM
+from publishing_platform.forms.models import UserAndFormRelationsORM
+from publishing_platform.forms.dto import UserAndFormRelationsFAPI
 from publishing_platform.repo.common.common_dto import UpdateRatingFAPI
 from publishing_platform.repo.common.common_service import update_rating
 from publishing_platform.tasks.models import TaskAndUserRelationORM
@@ -20,6 +24,7 @@ __all__ = [
     "update_user",
     "delete_user",
     "get_users_all",
+    "get_all_relations_where_user_in_task"
 ]
 
 
@@ -100,3 +105,12 @@ async def delete_user(user_id: UUID) -> None:
 
 async def get_users_all() -> List[UserFAPI]:
     return [UserFAPI(**u.to_dict()) for u in await User.query.gino.all()]
+
+
+async def get_all_relations_where_user_in_task(user_id: UUID) -> List[TaskAndUserRelationFAPI]:
+    return [TaskAndUserRelationFAPI(**u.to_dict()) for u in await TaskAndUserRelationORM.query.where(TaskAndUserRelationORM.user_id == user_id).gino.all()]
+
+
+async def get_all_relations_where_user_in_form(user_id: UUID) -> List[UserAndFormRelationsFAPI]:
+    return [UserAndFormRelationsFAPI(**u.to_dict()) for u in await UserAndFormRelationsORM.query.where(UserAndFormRelationsORM.user_id == user_id).gino.all()]
+

@@ -78,7 +78,7 @@ async def get_attachment_by_task(task_id: UUID):
 
     return StreamingResponse(content=BytesIO(initial_bytes=uploaded_file),
                              media_type=file.media_type,
-                             headers={"Content-Disposition": 'attachment; filename="test"'})
+                             headers={"Content-Disposition": "attachment; filename='test'"})
 
 
 async def delete_attachment(task_id: UUID):
