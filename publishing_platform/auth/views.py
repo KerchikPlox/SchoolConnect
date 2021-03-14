@@ -19,6 +19,6 @@ async def login_for_access_token(form_data: OAuth2PasswordRequestForm = Depends(
     return await auth_service.provide_auth(form_data.username, form_data.password)
 
 
-@auth_router.get("", response_model=UserFAPI)
+@auth_router.get("/get_me", response_model=UserFAPI)
 async def get_me(current_user: UserFAPI = Depends(auth_service.get_current_active_user)):
     return current_user

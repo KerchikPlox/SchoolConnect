@@ -24,6 +24,31 @@ async def get_forms_all() -> List[FormFAPI]:
     return [FormFAPI(**u.to_dict()) for u in await FormORM.query.gino.all()]
 
 
+async def get_form_by_id(form_id: UUID) -> FormFAPI:
+    form = await FormORM.query.where(FormORM.id == form_id).gino.first_or_404()
+    return FormFAPI(**form.to_dict())
+
+
+async def get_form_by_user_id(user_id: UUID) -> List[FormFAPI]:
+    form_ids = [
+        r.form_id
+        for r in (
+            await UserAndFormRelationsORM
+                .query
+                .where(UserAndFormRelationsORM.user_id == user_id)
+                .gino.all()
+        )
+    ]
+
+    forms: List[FormORM] = await (
+        FormORM.query.where(FormORM.id.in_(form_ids)).gino.all()
+    )
+
+    print(form_ids)
+
+    return forms
+
+
 async def delete_form(form_id: UUID) -> None:
     form = await FormORM.query.where(FormORM.id == form_id).gino.first_or_404()
     relations_ids = [
@@ -55,6 +80,10 @@ async def get_all_realtions() -> List[UserAndFormRelationsFAPI]:
 
 async def get_relations_by_role(role: Roles) -> List[UserAndFormRelationsFAPI]:
     return [UserAndFormRelationsFAPI(**u.to_dict()) for u in await UserAndFormRelationsORM.query.where(UserAndFormRelationsORM.role == role).gino.all()]
+
+
+async def get_relations_by_user_id(user_id: UUID) -> List[UserAndFormRelationsFAPI]:
+    return [UserAndFormRelationsFAPI(**u.to_dict()) for u in await UserAndFormRelationsORM.query.where(UserAndFormRelationsORM.user_id == user_id).gino.all()]
 
 
 async def create_relation_form_to_student(add_relation_info: AddRelationFormToStudentFAPI):
