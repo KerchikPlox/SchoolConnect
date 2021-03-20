@@ -25,5 +25,4 @@ class UserAndFormRelationsORM(db.Model):
 
     __user_id_fk = db.ForeignKeyConstraint(["user_id"], ["users.id"])
     __form_id_fk = db.ForeignKeyConstraint(["form_id"], ["forms.id"])
-    __unique_constrait_pk = db.PrimaryKeyConstraint("form_id", "user_id")
 

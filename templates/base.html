@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 <!doctype html>
 <html lang="en">
 <head>
@@ -23,5 +24,39 @@
 <main role="main" class="container">
     {% block content %}{% endblock %}
 </main>
+=======
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Титль</title>
+</head>
+    тут то, что хотите после логина
+<body>
+<script>
+
+    // --------------------------------------------------- Эта секция исполняется при загрузке страницы --------------------------------------------------------
+    // проверяем автризацию: если мы уже авторизованы, сразу попадаем в лк вместо страницы логина
+    document.onload = check_auth()
+
+    // ---------------------------------------------------------------------------------------------------------------------------------------------------------
+
+    // использовать потом на всех страницах
+    function check_auth() {
+
+        console.log(window.location.pathname)
+
+        if (document.cookie.match('(^|;) ?' + 'access_token' + '=([^;]*)(;|$)') == null) {
+            document.cookie = "";
+            window.location.replace('{{BACKEND_DOMAIN}}api/test/login')
+        } else {
+            if (window.location.pathname === '/api/test/login') {
+                window.location.replace('{{BACKEND_DOMAIN}}api/test')
+            }
+        }
+    }
+
+</script>
+>>>>>>> origin/main
 </body>
 </html>

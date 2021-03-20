@@ -21,6 +21,6 @@ async def login_for_access_token(request: Request, form_data: OAuth2PasswordRequ
     return templates.TemplateResponse('login.html', {'form_data': form_data, 'title': 'авторизация', 'request': request})
 
 
-@auth_router.get("", response_model=UserFAPI)
+@auth_router.get("/get_me", response_model=UserFAPI)
 async def get_me(current_user: UserFAPI = Depends(auth_service.get_current_active_user)):
     return current_user

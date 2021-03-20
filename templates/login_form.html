@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>SchoolConnect</title>
+    <link href="https:////maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+    <script
+            src="https://cdn.jsdelivr.net/npm/js-cookie@rc/dist/js.cookie.min.js"
+    ></script>
+</head>
+
+<body>
+<div id="login">
+    <h3 class="text-center text-white pt-5">Login form</h3>
+    <div class="container">
+        <div id="login-row" class="row justify-content-center align-items-center">
+            <div id="login-column" class="col-md-6">
+                <div id="login-box" class="col-md-12">
+
+                    <form id="login-form" class="form" action="" onsubmit="auth_user(event)">
+                        <h3 class="text-center text-info">Вход в систему</h3>
+
+                        <div class="form-group">
+                            <label for="username" class="text-info">Логин:</label><br>
+                            <input autocomplete="off" type="text" id="username" class="form-control" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="password" class="text-info">Пароль:</label><br>
+                            <input autocomplete="off" type="password" id="password" class="form-control" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="remember-me" class="text-info"><span>Запомнить меня</span> <span><input id="remember-me" name="remember-me"
+                                                                                                                type="checkbox"></span></label><br>
+                            <button class="btn btn-info btn-md">Войти</button>
+                        </div>
+
+                    </form>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script>
+
+    // --------------------------------------------------- Эта секция исполняется при загрузке страницы --------------------------------------------------------
+    // проверяем автризацию: если мы уже авторизованы, сразу попадаем в лк вместо страницы логина
+    document.onload = check_auth()
+
+    // ---------------------------------------------------------------------------------------------------------------------------------------------------------
+
+    function auth_user(event) {
+
+        // отключаем автообновление страницы при нажатии кнопки
+        event.preventDefault()
+
+        const login = document.getElementById('username');
+        const password = document.getElementById('password');
+
+        let form = new URLSearchParams();
+        form.append('username', login.value);
+        form.append('password', password.value);
+        form.append('grant_type', 'password');
+
+
+        fetch(
+            '{{BACKEND_DOMAIN}}api/auth/sign_in',
+            {
+                method: 'POST',
+                mode: 'cors', // no-cors, *cors, same-origin
+                cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
+                credentials: 'include', // *include, same-origin, omit
+                headers: {
+                    // 'Content-Type': 'application/json'
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                },
+                redirect: 'manual', // *manual, follow, error
+                referrerPolicy: 'no-referrer', // *no-referrer, client
+                body: form.toString(), // body data type must match "Content-Type" header
+                json: true
+            }
+        )
+            .then((response) => {
+                if (response.status !== 200) {
+                    // делайте что-то, сообщение какое-то о неправильных данных выводите, хз
+                } else {
+                    return response.json();
+                }
+
+            })
+            .then((data) => {
+                Cookies.set('access_token', data['access_token'], {expires: 7});
+
+                // забираем юзера и кладём в куки
+                fetch(
+                    '{{BACKEND_DOMAIN}}api/auth/',
+                    {
+                        method: 'GET',
+                        mode: 'cors', // no-cors, *cors, same-origin
+                        cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
+                        credentials: 'include', // *include, same-origin, omit
+                        referrerPolicy: 'no-referrer', // *no-referrer, client
+                        headers: {'Authorization': `Bearer ${data['access_token']}`}
+                    }
+                ).then((response) => {
+                        if (response.status !== 200) {
+                            console.log(response.json())
+                            // делайте что-то, сообщение какое-то о неправильных данных выводите, хз
+                        } else {
+                            return response.json();
+                        }
+                    }
+                ).then((data) => {
+                        console.log(data)
+                        Cookies.set('current_user', JSON.stringify(data));
+                        // как потом получать какие-то свойства юзера:
+                        // console.log(JSON.parse(Cookies.get('current_user')).author_name);
+
+                        // редирект на другую страницу
+                        window.location.replace('{{BACKEND_DOMAIN}}api/test')
+                    }
+                )
+
+            });
+    }
+
+    // использовать потом на всех страницах
+    function check_auth() {
+
+        console.log(window.location.pathname)
+
+        if (document.cookie.match('(^|;) ?' + 'access_token' + '=([^;]*)(;|$)') == null) {
+            document.cookie = "";
+            if (window.location.pathname !== '/api/test/login') {
+                window.location.replace('{{BACKEND_DOMAIN}}api/test/login');
+            }
+        } else {
+            if (window.location.pathname === '/api/test/login') {
+                window.location.replace('{{BACKEND_DOMAIN}}api/test/user_profile')
+            }
+        }
+    }
+
+</script>
+</body>
+</html>
