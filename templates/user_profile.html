@@ -18,8 +18,8 @@
                 <div class="card-body">
                   <div class="d-flex flex-column align-items-center text-center">
                     <div class="mt-3">
-                      <h4>Имя пользователя</h4>
-                        <p class="text-secondary mb-1">Класс в котором ученик</p>
+                      <h4 class="author-name">Имя пользователя</h4>
+                        <p class="user-class text-secondary mb-1">Класс в котором ученик</p>
                     </div>
                   </div>
                 </div>
@@ -32,8 +32,7 @@
                     <div class="col-sm-3">
                       <h6 class="mb-0">Имя пользователя:</h6>
                     </div>
-                    <div class="col-sm-9 text-secondary">
-                      Здесь имя юзера
+                    <div class="author-name col-sm-9 text-secondary">
                     </div>
                   </div>
                   <hr>
@@ -41,8 +40,7 @@
                     <div class="col-sm-3">
                       <h6 class="mb-0">Класс:</h6>
                     </div>
-                    <div class="col-sm-9 text-secondary">
-                      Класс в котором юзер
+                    <div class="classes col-sm-9 text-secondary">
                     </div>
                   </div>
                   <hr>
@@ -50,8 +48,7 @@
                     <div class="col-sm-3">
                       <h6 class="mb-0">Роль</h6>
                     </div>
-                    <div class="col-sm-9 text-secondary">
-                      В зависимости от роли - ученик\учитель
+                    <div class="role col-sm-9 text-secondary">
                     </div>
                   </div>
                   <hr>
@@ -59,8 +56,7 @@
                     <div class="col-sm-3">
                       <h6 class="mb-0">В системе с:</h6>
                     </div>
-                    <div class="col-sm-9 text-secondary">
-                      С какого времени в системе
+                    <div class="created-at col-sm-9 text-secondary">
                     </div>
                   </div>
                   <hr>
@@ -70,6 +66,39 @@
           </div>
         </div>
     </div>
+<script>
+  void async function () {
+    const userDataResponse = await fetch("{{BACKEND_DOMAIN}}api/auth/get_me", {
+      credentials: "include",
+    });
 
+    if (!userResponse.ok) {
+      // не получилось - можно вывести сообщение об ошибке
+      return;
+    }
+
+    const userData = await userResponse.json();
+
+    document.querySelectorAll(".author-name").forEach((element) => {
+      element.textContent = userData.author_name;
+    });
+
+    document.querySelector(".role").textContent = userData.role;
+    document.querySelector(".created-at").textContent = userData.created_at;
+
+    const formResponse = await fetch(`{{BACKEND_DOMAIN}}api/forms/get_form_by_user_id?user_id=${userData.user_id}`, {
+      credentials: "include",
+    });
+
+    if (!formResponse.ok) {
+      // не получилось - можно вывести сообщение об ошибке
+      return;
+    }
+
+    const formData = await formResponse.json();
+    document.querySelector(".classes").textContent =
+      formData.map(fd => fd.name).join(", ");
+  }();
+</script>
 </body>
 </html>

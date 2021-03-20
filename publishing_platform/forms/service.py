@@ -44,7 +44,7 @@ async def get_form_by_user_id(user_id: UUID) -> List[FormFAPI]:
         FormORM.query.where(FormORM.id.in_(form_ids)).gino.all()
     )
 
-    print(form_ids)
+    print(FormORM.query.where(FormORM.id.in_(form_ids)))
 
     return forms
 

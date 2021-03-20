@@ -16,3 +16,8 @@ async def main(request: Request):
 @default_routes.get("/login", response_class=HTMLResponse)
 async def login(request: Request):
     return templates.TemplateResponse("login_form.html", {'request': request, 'BACKEND_DOMAIN': BACKEND_DOMAIN, })
+
+
+@default_routes.get("/user_profile", response_class=HTMLResponse)
+async def user_profile(request: Request):
+    return templates.TemplateResponse("user_profile.html", {'request': request, 'BACKEND_DOMAIN': BACKEND_DOMAIN, })
