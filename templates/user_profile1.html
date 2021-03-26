@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+                    <link rel="stylesheet"
+                    href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
+                    integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh"
+                    crossorigin="anonymous">
+    <title>Личный кабинет</title>
+</head>
+<body>
+<div style="left: 25%;margin-left: -200px;position: absolute;width: 1000px;">
+  <h2>Имя Фамилия Отчество</h2>
+  <h5>Роль</h5>  <br> <br>
+  <a type="submit" class="btn btn-secondary" href="/my_tasks">Мои задания</a>  <br> <br>
+  <p>{% if current_user.Role == 'student'%}
+    <div>
+    <h4>Класс: {{ current_user.Class }}</h4>  <br> <br>
+    <details>
+        <summary>Показать учителей</summary>
+{% for item in current_user.teachers %}
+        <p>{{ item }}</p>
+{% endfor %}
+    </details>
+    </div>
+    {% else %}
+    <div>
+        <details>
+            <summary>Показать классы</summary>
+{% for item in current_user.classes %}
+            <p>{{ items }}</p>
+{% endfor %}
+        </details>
+    </div>{% endif %} <br> <br>
+    <h5>Логин: {{ author_name }}</h5> <br> <br>
+    <a type="submit" class="btn btn-danger" href="/login">Выйти из системы</a>
+</div>
+</body>
+</html>

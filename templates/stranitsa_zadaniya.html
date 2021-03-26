@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+                    <link rel="stylesheet"
+                    href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
+                    integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh"
+                    crossorigin="anonymous">
+    <title>Задание</title>
+</head>
+<body>
+<br>
+<br>
+<div class="main" style="left: 25%;margin-left: -200px;position: absolute;width: 1000px;">
+    <div class="container">
+        <div class="row">
+            <div class="col-1-2">
+                <form>
+                    <h3>Название:</h3>
+                    <br>
+                    <h4>{{ task_name }}</h4>
+                    <br>
+                    <h3>Описание задания</h3>
+                    <br>
+                    <h4>{{ description }}</h4>
+                    <br>
+                    <fieldset> <legend><h3>Выберите файл(-ы) с решениями</h3></legend>
+                    <p><input type="file" multiple="multiple"></p>
+                    </fieldset>  <br> <br>
+                    <a type="submit" class="btn btn-success" href="/login">Отправить на проверку</a>
+                </form>
+            </div>
+            <div class="col-1-2" style="margin-left: 50px">
+                <a type="submit" class="btn btn-warning" href="/login">Скачать материалы задания</a>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

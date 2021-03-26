@@ -35,7 +35,7 @@ async def get_form_by_id(form_id: UUID):
     return await forms_service.get_form_by_id(form_id)
 
 
-@forms_router.get('/get_form_by_user_id', response_model=List[FormFAPI])
+@forms_router.get('/get_form_by_user_id')
 async def get_form_by_user_id(user_id: UUID):
     return await forms_service.get_form_by_user_id(user_id)
 

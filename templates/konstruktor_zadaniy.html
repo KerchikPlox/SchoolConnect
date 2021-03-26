@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+                    <link rel="stylesheet"
+                    href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
+                    integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh"
+                    crossorigin="anonymous">
+    <title>Конструктор заданий</title>
+</head>
+<body>
+<br>
+<br>
+<div style="left: 25%;margin-left: -200px;position: absolute;width: 1000px;">
+<form>
+    <h3>Название</h3>
+    <br>
+    <input type="text" name="name" /> <br> <br>
+    <h3>Описание задания</h3>
+    <br>
+    <textarea cols="80" rows="5" name="address"></textarea> <br> <br>
+    <h3>
+    Классы:
+    </h3>
+    <select>
+    <option value="1а">1а</option>
+    <option value="1б">1б</option>
+    <option value="2а">2а</option>
+    <option value="2б">2б</option>
+    <option value="3а">3а</option>
+    <option value="3б">3б</option>
+    <option value="4а">4а</option>
+    </select>  <br> <br>
+<fieldset> <legend><h3>Выберите файл(-ы) с заданиями</h3></legend>
+<p><input type="file" multiple="multiple"></p>
+</fieldset>  <br> <br>
+<a type="submit" class="btn btn-success" href="/login">Отправить</a>
+</form>
+</div>
+</body>
+</html>
