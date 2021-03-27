@@ -29,7 +29,7 @@ async def get_form_by_id(form_id: UUID) -> FormFAPI:
     return FormFAPI(**form.to_dict())
 
 
-async def get_form_by_user_id(user_id: UUID) -> List[FormFAPI]:
+async def get_form_by_user_id(user_id: UUID):
     form_ids = [
         r.form_id
         for r in (
