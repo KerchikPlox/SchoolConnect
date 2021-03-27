@@ -14,15 +14,15 @@
 <br>
 <div style="left: 25%;margin-left: -200px;position: absolute;width: 1000px;">
 <form>
-    <label>Название</label>
+    <h3>Название</h3>
     <br>
     <input type="text" name="name" /> <br> <br>
-    <label>Описание названия</label>
+    <h3>Описание задания</h3>
     <br>
     <textarea cols="80" rows="5" name="address"></textarea> <br> <br>
-    <label>
+    <h3>
     Классы:
-    </label>
+    </h3>
     <select>
     <option value="1а">1а</option>
     <option value="1б">1б</option>
@@ -31,8 +31,11 @@
     <option value="3а">3а</option>
     <option value="3б">3б</option>
     <option value="4а">4а</option>
-    </select>
-
+    </select>  <br> <br>
+<fieldset> <legend><h3>Выберите файл(-ы) с заданиями</h3></legend>
+<p><input type="file" multiple="multiple"></p>
+</fieldset>  <br> <br>
+<a type="submit" class="btn btn-success" href="/login">Отправить</a>
 </form>
 </div>
 </body>

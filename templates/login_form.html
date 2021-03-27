@@ -49,7 +49,7 @@
 
     // --------------------------------------------------- Эта секция исполняется при загрузке страницы --------------------------------------------------------
     // проверяем автризацию: если мы уже авторизованы, сразу попадаем в лк вместо страницы логина
-    document.onload = check_auth()
+    // document.onload = check_auth()
 
     // ---------------------------------------------------------------------------------------------------------------------------------------------------------
 
@@ -86,7 +86,7 @@
         )
             .then((response) => {
                 if (response.status !== 200) {
-                    // делайте что-то, сообщение какое-то о неправильных данных выводите, хз
+                    // чтото
                 } else {
                     return response.json();
                 }
@@ -97,7 +97,7 @@
 
                 // забираем юзера и кладём в куки
                 fetch(
-                    '{{BACKEND_DOMAIN}}api/auth/',
+                    '{{BACKEND_DOMAIN}}api/auth/get_me',
                     {
                         method: 'GET',
                         mode: 'cors', // no-cors, *cors, same-origin
@@ -121,7 +121,7 @@
                         // console.log(JSON.parse(Cookies.get('current_user')).author_name);
 
                         // редирект на другую страницу
-                        window.location.replace('{{BACKEND_DOMAIN}}api/test')
+                        window.location.replace('{{BACKEND_DOMAIN}}api/test/user_profile')
                     }
                 )
 
