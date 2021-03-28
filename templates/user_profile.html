@@ -14,18 +14,30 @@
     <script
             src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.22.1/moment.min.js"
     ></script>
+    <link rel="stylesheet" type="text/css" href="css/sidebar.css">
 </head>
 <body>
-<div style="left: 25%;margin-left: -200px;position: absolute;width: 1000px;">
-  <h2>Имя пользователя:</h2><div class="d-inline" id="user_name"></div>
-  <h4>Роль</h4><div id="user_role"></div> <br> <br>
-  <a type="submit" class="btn btn-secondary" href="/my_tasks">Мои задания</a> <br> <br>
-  <div id="user_form">
-    <h5>Класс:</h5>
-    <div id="user_form_student"></div>
+<div class="sidenav">
+  <a style="color: white; font-family: Franklin Gothic Medium; margin-left: 16px" href="api/test/user_profile"><big>School</big></a>
+    <a style="color: white; font-family: Franklin Gothic Medium; margin-left: 7px" href="api/test/user_profile"><big>Connect</big></a> <br>
+  <a style="color: white; font-family: Arial; margin-left: 13px" href="#">Задания</a>
+  <a style="color: white; font-family: Arial; margin-top: 1075px; margin-left: 23px" href="#">Выйти</a>
+</div>
+<div style="left: 25%;margin-left: 100px;position: absolute;width: 1200px; margin-bottom: 100px;"> <br> <br> <br> <br> <br>
+    <div class="card">
+        <div class="card-header">
+            <h2>Имя пользователя:</h2><div style="font-size: 24px" class="card_title" id="user_name"></div>
+        </div>
+  <div class="card-body">
+      <div id="user_form">
+        <h5>Класс:</h5>
+        <div style="font-size: 24px" class="card_text" id="user_form_student"></div> <br>
+      </div>
+      <h4>Роль</h4><div style="font-size: 24px" class="card_text" id="user_role"></div> <br>
+        <h4>В системе с:</h4>
+      <div style="font-size: 24px" class="card_text" id="user_created_at"></div> <br>
   </div>
-  <h4>В системе с:</h4>
-  <div id="user_created_at"></div>
+</div>
 </div>
 <script>
   void async function () {
@@ -68,7 +80,7 @@
                     }
                 )
 
-    document.getElementById("user_created_at").innerHTML=moment(JSON.parse(Cookies.get('current_user')).created_at).format("YYYY-MM-DD HH:mm:ss");
+    document.getElementById("user_created_at").innerHTML=moment(JSON.parse(Cookies.get('current_user')).created_at).format("YYYY-MM-DD");
   }();
 </script>
 </body>

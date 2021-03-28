@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="ru">
+
+<head>
+    <script src="js/jquery-3.6.0.min.js"></script> <!-- подключаем jquery-->
+</head>
+
+<body>
+
+	<div id="ajaxblock">
+	</div>
+
+
+</body>
+
+</html>
+<script>
+
+	$( document ).ready(function() {//ждем загрузки страницы и....
+		$.ajax({//делаем запрос с помощью jquery
+			type: "POST",
+			url: 'https://api.mocki.io/v1/2e5c2d42', // формируем запрос на адрес (подставить api)
+			success: function(data){
+				//при успешном выполнении для каждого элемента в полученном массиве выполняем функцию
+				$.each( data, (function(index, value){ // value это объект из json'а
+					$("#ajaxblock").append(value.name);//обращаемся к элементу страницы c индексом ajaxblock
+//						 и добавляем в него информацию из поля name каждого объекта из json массива
+					$("#ajaxblock").append("<br>") // добавляем перенос на новую строку
+				}));
+		  }
+		});
+	});
+</script>
