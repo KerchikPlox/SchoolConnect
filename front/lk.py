@@ -21,3 +21,13 @@ async def login(request: Request):
 @default_routes.get("/user_profile", response_class=HTMLResponse)
 async def user_profile(request: Request):
     return templates.TemplateResponse("user_profile.html", {'request': request, 'BACKEND_DOMAIN': BACKEND_DOMAIN, })
+
+
+@default_routes.get("/tasks", response_class=HTMLResponse)
+async def tasks(request: Request):
+    return templates.TemplateResponse("tasks.html", {'request': request, 'BACKEND_DOMAIN': BACKEND_DOMAIN, })
+
+
+@default_routes.get("/my_tasks", response_class=HTMLResponse)
+async def my_tasks(request: Request):
+    return templates.TemplateResponse("my_tasks.html", {'request': request, 'BACKEND_DOMAIN': BACKEND_DOMAIN, })
