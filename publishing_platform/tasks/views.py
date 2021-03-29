@@ -32,6 +32,11 @@ async def get_all_relations() -> List[TaskAndUserRelationFAPI]:
     return await tasks_service.get_all_relations()
 
 
+@tasks_router.get("/get_all_relations_by_user_id/")  # noqa
+async def get_all_relations(user_id: UUID) -> List[TaskAndUserRelationFAPI]:
+    return await tasks_service.get_all_relations_by_user_id(user_id)
+
+
 @tasks_router.put("/{task_id}", response_model=TaskFAPI)
 async def update_task(task_id: UUID = Path(...), update_info = Depends(UpdateTaskFAPI)):
     return await tasks_service.update_task(update_info, task_id)

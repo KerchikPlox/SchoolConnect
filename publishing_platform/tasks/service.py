@@ -60,6 +60,26 @@ async def get_all_relations() -> List[TaskAndUserRelationFAPI]:
     return [TaskAndUserRelationFAPI(**u.to_dict()) for u in await TaskAndUserRelationORM.query.gino.all()]
 
 
+async def get_all_relations_by_user_id(user_id: UUID) -> List[TaskAndUserRelationFAPI]:
+    task_ids = [
+        r.task_id
+        for r in (
+            await TaskAndUserRelationORM
+                .query
+                .where(TaskAndUserRelationORM.user_id == user_id)
+                .gino.all()
+        )
+    ]
+
+    tasks: List[TaskORM] = []
+
+    for i in task_ids:
+        task = await TaskORM.query.where(TaskORM.id == i).gino.first_or_404()
+        tasks.append(task)
+
+    return tasks
+
+
 async def update_task(update_info: UpdateTaskFAPI, task_id: UUID = Path(...)):
     await TaskORM.update.values(**update_info.exclude_unset()).where(TaskORM.id == task_id).gino.status()
 
