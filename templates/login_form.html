@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:display="http://www.w3.org/1999/xhtml">
 <head>
     <meta charset="UTF-8">
     <title>SchoolConnect</title>
@@ -31,13 +31,16 @@
                         </div>
 
                         <div class="form-group">
-                            <label for="remember-me" class="text-info"><span>Запомнить меня</span> <span><input id="remember-me" name="remember-me"
-                                                                                                                type="checkbox"></span></label><br>
-                            <button class="btn btn-info btn-md">Войти</button>
+                            <div align="center">
+                                <button class="btn btn-info btn-md">Войти</button> <br> <br>
+                            </div>
+                            <div>
+                                <div id="status_error" style="display: none">
+                                    <p align="center" style="color: #ff0000">Неверное имя пользователя или пароль</p>
+                                </div>
+                            </div>
                         </div>
-
                     </form>
-
                 </div>
             </div>
         </div>
@@ -86,7 +89,7 @@
         )
             .then((response) => {
                 if (response.status !== 200) {
-                    // чтото
+                    document.getElementById("status_error").setAttribute("style", "display: block");
                 } else {
                     return response.json();
                 }

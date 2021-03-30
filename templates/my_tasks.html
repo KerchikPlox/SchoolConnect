@@ -7,7 +7,13 @@
                     href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
                     integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh"
                     crossorigin="anonymous">
-    <title>Title</title>
+    <title>Мои задания</title>
+    <script
+            src="https://cdn.jsdelivr.net/npm/js-cookie@rc/dist/js.cookie.min.js"
+    ></script>
+    <script
+            src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.22.1/moment.min.js"
+    ></script>
     <style>
         .sidenav {
     height: 100%;
@@ -50,6 +56,40 @@
   <a style="color: white; font-family: Arial; margin-top: 25px; margin-left: 13px" href="/api/test/tasks">Задания</a>
   <a style="color: white; font-family: Arial; margin-top: 350%; margin-left: 26px" href="/api/test/login">Выйти</a>
 </div>
-<h1 style="color: grey; text-align: center; margin-top: 25%">У вас еще нет заданий</h1>
+<div onclick="">
+    <div style="left: 25%;margin-left: 100px;position: absolute;width: 400px; margin-bottom: 100px;">
+        <div class="card">
+            <div class="card-header">
+                <nav>
+                    <div id="task_title"></div>
+                    <div id="task_time"></div>
+                </nav>
+            </div>
+        </div>
+    </div>
+</div>
+<!--<h1 style="color: grey; text-align: center; margin-top: 25%">У вас еще нет заданий</h1>-->
+<script>
+    void async function () {
+        fetch(
+                    '{{BACKEND_DOMAIN}}api/tasks/get_all_relations_by_user_id/?user_id='+JSON.parse(Cookies.get('current_user')).id,
+                    {
+                        method: 'GET',
+                        mode: 'cors', // no-cors, *cors, same-origin
+                        cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
+                        referrerPolicy: 'no-referrer', // *no-referrer, client
+                    }
+                ).then((response) => {
+                        if (response.status !== 200) {
+                            console.log(response.json())
+                            // делайте что-то, сообщение какое-то о неправильных данных выводите, хз
+                        } else {
+                            console.log(response.json())
+                            return response.json();
+                        }
+                    }
+                )
+    }();
+</script>
 </body>
 </html>
