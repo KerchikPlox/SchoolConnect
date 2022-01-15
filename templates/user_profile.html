@@ -3,10 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-                    <link rel="stylesheet"
-                    href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
-                    integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh"
-                    crossorigin="anonymous">
+    <link rel="stylesheet" href="js/css/user_profile.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Raleway&display=swap" rel="stylesheet">
     <title>Личный кабиет</title>
     <script
             src="https://cdn.jsdelivr.net/npm/js-cookie@rc/dist/js.cookie.min.js"
@@ -14,62 +14,62 @@
     <script
             src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.22.1/moment.min.js"
     ></script>
-    <style>
-        .sidenav {
-    height: 100%;
-    width: 160px;
-    position: fixed;
-    z-index: 1;
-    top: 0;
-    left: 0;
-    background-color: #17a2b8;
-    overflow-x: hidden;
-    padding-top: 20px;
-}
-
-.sidenav a {
-    padding: 6px 8px 6px 16px;
-    text-decoration: none;
-    font-size: 25px;
-    color: #818181;
-    display: block;
-}
-
-.sidenav a:hover {
-    color: #f1f1f1;
-}
-
-.main {
-    margin-left: 160px;
-    padding: 0px 10px;
-}
-
-@media screen and (max-height: 450px) {
-    .sidenav {padding-top: 15px;}
-    .sidenav a {font-size: 18px;}
-}
-    </style>
 </head>
 <body>
-<div class="sidenav">
-  <a style="color: white; font-family: Franklin Gothic Medium; margin-left: 6px" href="/api/test/user_profile"><img src="https://i.imgur.com/kLsiB9P.png"></a>
-  <a style="color: white; font-family: Arial; margin-top: 25px; margin-left: 13px" href="/api/test/tasks">Задания</a>
-  <a style="color: white; font-family: Arial; margin-top: 350%; margin-left: 26px" href="/api/test/login">Выйти</a>
-</div>
-<div style="left: 25%;margin-left: 100px;position: absolute;width: 1200px; margin-bottom: 100px;"> <br> <br> <br> <br> <br>
-    <div class="card">
-        <div class="card-header">
-            <h2>Имя пользователя:</h2><div style="font-size: 24px" class="card_title" id="user_name"></div>
+<header>
+    <div class="logo">
+        <a href="user_profile.html"><img class="graficlogo" src="img/logo.png" alt="Logo"></a>
+    </div>
+    <nav>
+        <div class="topnav" id="myTopnav">
+            <a href="user_profile.html">Личный кабинет</a>
+            <a href="my_tasks.html">Мои задания</a>
+            <a href="konstruktor_adaniy.html">Создать задание</a>
+            <a id="menu" href="#" class="icon">&#9776;</a>
         </div>
-  <div class="card-body">
-      <div id="user_form">
-        <h5>Класс:</h5>
-        <div style="font-size: 24px" class="card_text" id="user_form_student"></div> <br>
-      </div>
-      <h4>Роль</h4><div style="font-size: 24px" class="card_text" id="user_role"></div> <br>
-        <h4>В системе с:</h4>
-      <div style="font-size: 24px" class="card_text" id="user_created_at"></div> <br>
-  </div>
+    </nav>
+</header>
+<div class="container rounded bg-white mt-5 mb-5">
+    <div class="row">
+        <div class="col-md-3 border-right">
+            <div class="d-flex flex-column align-items-center text-center p-3 py-5"><span></span></div>
+        </div>
+        <div class="col-md-5 border-right">
+            <div class="p-3 py-5">
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                    <h4 class="text-right">Личный кабинет</h4>
+                </div>
+                <div class="row mt-2">
+                    <div class="col-md-6"><label class="labels"><h5>Имя</h5></label>
+                        <p>Иван</p>
+                    </div>
+                    <div class="col-md-6"><label class="labels"><h5>Фамилия</h5></label>
+                        <p>Иванов</p>
+                    </div>
+                </div>
+                <div class="row mt-3">
+                    <div class="col-md-12"><label class="labels"><h5>Роль</h5></label>
+                        <p>Учитель</p>
+                    </div>
+                    <div class="col-md-12"><label class="labels"></label><details>
+                        <summary>Классы:</summary>
+                            <p>11 Б</p>
+                        </details></div>
+                </div>
+                <div>
+                    <details>
+                        <summary>Мои задания:</summary>
+                            <p>Русский язык. 11 Б. 29.10.2021</p>
+                    </details>
+                </div>
+                <div class="row mt-3">
+                    <div class="col-md-6"><label class="labels">Country</label><input type="text" class="form-control" placeholder="country" value=""></div>
+                    <div class="col-md-6"><label class="labels">State/Region</label><input type="text" class="form-control" value="" placeholder="state"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 </div>
 </div>
 <script>
